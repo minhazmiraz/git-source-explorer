@@ -3,16 +3,16 @@
   "name": "Extension Name",
   "version": "0.1",
   "description": "Some Description",
-  "permissions": [
-  ],
+  "permissions": ["tabs"],
   "background": {
     "scripts": ["static/js/background.js"]
   },
   "content_scripts": [{
     "js": [ "static/js/content.js" ],
     "matches": [
-      "http://*.example.com/*", "https://*.example.com/*"
-    ]
+      "http://*.github.com/*", "https://*.github.com/*"
+    ],
+    "run_at": "document_end"
   }],
   "icons": {
     "192": "logo192.png"

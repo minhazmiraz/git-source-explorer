@@ -1,7 +1,7 @@
-const paths = require('react-scripts/config/paths');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const paths = require("react-scripts/config/paths");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ManifestPlugin = require("webpack-manifest-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // Export override function(s) via object
 module.exports = {
@@ -15,15 +15,16 @@ function override(config, env) {
   // Note: you may remove any property below except "popup" to exclude respective entry point from compilation
   config.entry = {
     popup: paths.appIndexJs,
-    options: paths.appSrc + '/options.js',
-    background: paths.appSrc + '/background.js',
-    content: paths.appSrc + '/content.js'
+    options: paths.appSrc + "/options.js",
+    background: paths.appSrc + "/background.js",
+    content: paths.appSrc + "/content.js",
+    explorer: paths.appSrc + "/explorer.js",
   };
   // Change output filename template to get rid of hash there
-  config.output.filename = 'static/js/[name].js';
+  config.output.filename = "static/js/[name].js";
   // Disable built-in SplitChunksPlugin
   config.optimization.splitChunks = {
-    cacheGroups: {default: false}
+    cacheGroups: { default: false },
   };
   // Disable runtime chunk addition for each entry point
   config.optimization.runtimeChunk = false;
@@ -41,54 +42,72 @@ function override(config, env) {
     minifyCSS: true,
     minifyURLs: true,
   };
-  const isEnvProduction = env === 'production';
-  
+  const isEnvProduction = env === "production";
+
   // Custom HtmlWebpackPlugin instance for index (popup) page
   const indexHtmlPlugin = new HtmlWebpackPlugin({
     inject: true,
-    chunks: ['popup'],
+    chunks: ["popup"],
     template: paths.appHtml,
-    filename: 'popup.html',
+    filename: "popup.html",
     minify: isEnvProduction && minifyOpts,
   });
   // Replace origin HtmlWebpackPlugin instance in config.plugins with the above one
-  config.plugins = replacePlugin(config.plugins,
-    (name) => /HtmlWebpackPlugin/i.test(name), indexHtmlPlugin
+  config.plugins = replacePlugin(
+    config.plugins,
+    (name) => /HtmlWebpackPlugin/i.test(name),
+    indexHtmlPlugin
   );
 
   // Extra HtmlWebpackPlugin instance for options page
   const optionsHtmlPlugin = new HtmlWebpackPlugin({
     inject: true,
-    chunks: ['options'],
-    template: paths.appPublic + '/options.html',
-    filename: 'options.html',
+    chunks: ["options"],
+    template: paths.appPublic + "/options.html",
+    filename: "options.html",
     minify: isEnvProduction && minifyOpts,
   });
   // Add the above HtmlWebpackPlugin instance into config.plugins
   // Note: you may remove/comment the next line if you don't need an options page
   config.plugins.push(optionsHtmlPlugin);
 
+  // Extra HtmlWebpackPlugin instance for explorer page
+  const explorerHtmlPlugin = new HtmlWebpackPlugin({
+    inject: true,
+    chunks: ["explorer"],
+    template: paths.appPublic + "/explorer.html",
+    filename: "explorer.html",
+    minify: isEnvProduction && minifyOpts,
+  });
+  // Add the above HtmlWebpackPlugin instance into config.plugins
+  // Note: you may remove/comment the next line if you don't need an options page
+  config.plugins.push(explorerHtmlPlugin);
+
   // Custom ManifestPlugin instance to cast asset-manifest.json back to old plain format
   const manifestPlugin = new ManifestPlugin({
-    fileName: 'asset-manifest.json',
+    fileName: "asset-manifest.json",
   });
   // Replace origin ManifestPlugin instance in config.plugins with the above one
-  config.plugins = replacePlugin(config.plugins,
-    (name) => /ManifestPlugin/i.test(name), manifestPlugin
+  config.plugins = replacePlugin(
+    config.plugins,
+    (name) => /ManifestPlugin/i.test(name),
+    manifestPlugin
   );
 
   // Custom MiniCssExtractPlugin instance to get rid of hash in filename template
   const miniCssExtractPlugin = new MiniCssExtractPlugin({
-    filename: 'static/css/[name].css'
+    filename: "static/css/[name].css",
   });
   // Replace origin MiniCssExtractPlugin instance in config.plugins with the above one
-  config.plugins = replacePlugin(config.plugins,
-    (name) => /MiniCssExtractPlugin/i.test(name), miniCssExtractPlugin
+  config.plugins = replacePlugin(
+    config.plugins,
+    (name) => /MiniCssExtractPlugin/i.test(name),
+    miniCssExtractPlugin
   );
 
   // Remove GenerateSW plugin from config.plugins to disable service worker generation
-  config.plugins = replacePlugin(config.plugins,
-    (name) => /GenerateSW/i.test(name)
+  config.plugins = replacePlugin(config.plugins, (name) =>
+    /GenerateSW/i.test(name)
   );
 
   return config;
@@ -97,10 +116,16 @@ function override(config, env) {
 // Utility function to replace/remove specific plugin in a webpack config
 function replacePlugin(plugins, nameMatcher, newPlugin) {
   const i = plugins.findIndex((plugin) => {
-    return plugin.constructor && plugin.constructor.name &&
-      nameMatcher(plugin.constructor.name);
+    return (
+      plugin.constructor &&
+      plugin.constructor.name &&
+      nameMatcher(plugin.constructor.name)
+    );
   });
-  return i > -1?
-    plugins.slice(0, i).concat(newPlugin || []).concat(plugins.slice(i+1)) :
-    plugins;
+  return i > -1
+    ? plugins
+        .slice(0, i)
+        .concat(newPlugin || [])
+        .concat(plugins.slice(i + 1))
+    : plugins;
 }
