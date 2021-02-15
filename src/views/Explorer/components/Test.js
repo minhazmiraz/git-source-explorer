@@ -1,36 +1,29 @@
 import { useContext } from "react";
 import { BranchContext } from "../contexts/branchContext";
+import { FileTreeContext } from "../contexts/fileTreeContext";
 import { RepoContext } from "../contexts/repoContext";
 
 const Test = () => {
-  const { repoDetails, repoPending, repoError } = useContext(RepoContext);
-  const { branches, branchPending, branchError } = useContext(BranchContext);
+  const { repoDetails, fileTree, fileTreePending, fileTreeError } = useContext(
+    FileTreeContext
+  );
 
   return (
     <div className="">
-      {!repoPending &&
-        repoError === null &&
-        !branchPending &&
-        branchError === null && (
-          <div>
-            <p>
-              Repository Name: <b>{repoDetails.name}</b>
-            </p>
-            <p>
-              Created By: <b>{repoDetails.owner.login}</b>
-            </p>
-            <select name="branch_name">
-              {branches.map((branch) => (
-                <option key={branch.commit.sha} value={branch.name}>
-                  {branch.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      {console.log(repoPending)}
-      {repoError !== null && repoError}
-      {branchError !== null && branchError}
+      {repoDetails &
+      (
+        <div>
+          <p>
+            Repository Name: <b>{repoDetails.name}</b>
+          </p>
+          <p>
+            Created By: <b>{repoDetails.author}</b>
+          </p>
+          <p>
+            Branch: <b>{repoDetails.branch}</b>
+          </p>
+        </div>
+      )}
     </div>
   );
 };
