@@ -16,8 +16,8 @@ let scrapeData = () => {
   let url = window.location.href;
   let urlData = url.split("/");
 
-  repoData["name"] = urlData[3];
-  repoData["author"] = urlData[4];
+  repoData["author"] = urlData[3];
+  repoData["name"] = urlData[4];
 
   if (!repoData["name"] || !repoData["author"]) return false;
 

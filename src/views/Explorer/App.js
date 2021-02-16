@@ -1,7 +1,6 @@
 import React from "react";
 import Test from "./components/Test";
-import BranchContextProvider from "./contexts/branchContext";
-import RepoContextProvider from "./contexts/repoContext";
+import FileTreeContextProvider from "./contexts/fileTreeContext";
 
 function App() {
   return (

@@ -1,17 +1,19 @@
 import { useContext } from "react";
-import { BranchContext } from "../contexts/branchContext";
 import { FileTreeContext } from "../contexts/fileTreeContext";
-import { RepoContext } from "../contexts/repoContext";
 
 const Test = () => {
-  const { repoDetails, fileTree, fileTreePending, fileTreeError } = useContext(
-    FileTreeContext
-  );
+  const {
+    urlQuery: repoDetails,
+    fileTree,
+    fileContextPending,
+    fileContextError,
+  } = useContext(FileTreeContext);
+
+  console.log("test.js", repoDetails);
 
   return (
     <div className="">
-      {repoDetails &
-      (
+      {repoDetails && (
         <div>
           <p>
             Repository Name: <b>{repoDetails.name}</b>

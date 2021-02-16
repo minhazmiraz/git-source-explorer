@@ -3,7 +3,7 @@
   "name": "Extension Name",
   "version": "0.1",
   "description": "Some Description",
-  "permissions": ["tabs"],
+  "permissions": ["tabs", "storage"],
   "background": {
     "scripts": ["static/js/background.js"],
     "persistent": false
