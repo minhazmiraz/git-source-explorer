@@ -1,4 +1,4 @@
-export const useFetch = (url, abortCtrl) => {
+export const getFetch = (url, abortCtrl) => {
   console.log(url);
 
   return new Promise((resolve, reject) => {

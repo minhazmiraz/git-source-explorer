@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import GetUrlQuery from "../common/getUrlQuery";
 import { getFileTreeEndpoint } from "../common/getEndpoints";
-import { useFetch } from "../common/useFetch";
+import { getFetch } from "../common/getFetch";
 import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
 
 export const FileTreeContext = createContext();
@@ -22,9 +22,10 @@ const FileTreeContextProvider = (props) => {
     const abortCtrl = new AbortController();
     getDataFromStorage(storageKey).then((res) => {
       if (!res) {
-        useFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then((res) =>
-          setFileContextData(res)
-        );
+        getFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then((res) => {
+          setDataInStorage(storageKey, res);
+          setFileContextData(res);
+        });
       } else {
         setFileContextData(res);
       }
