@@ -1,49 +1,44 @@
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 import GetUrlQuery from "../common/getUrlQuery";
 import { getFileTreeEndpoint } from "../common/getEndpoints";
-import UseFetch from "../common/useFetch";
+import { useFetch } from "../common/useFetch";
+import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
 
 export const FileTreeContext = createContext();
 
 const FileTreeContextProvider = (props) => {
-  const urlQuery = GetUrlQuery();
-  console.log(urlQuery);
+  const repoDetails = GetUrlQuery();
+  const storageKey =
+    repoDetails.name +
+    repoDetails.author +
+    repoDetails.branch +
+    repoDetails.sha;
 
-  const {
-    data: fileTree,
-    isPending: fileContextPending,
-    error: fileContextError,
-  } = UseFetch(getFileTreeEndpoint(urlQuery));
+  const [fileContextData, setFileContextData] = useState(null);
 
-  console.log("fileTreeContext: ", {
-    fileTree,
-    fileContextPending,
-    fileContextError,
-  });
+  console.log(repoDetails);
 
-  /*   
-  chrome.storage.local.get(
-    [urlQuery.name + urlQuery.author + urlQuery.branch + urlQuery.sha],
-    (result) => {
-      if (chrome.runtime.lastError) {
-        const { fileTree, isPending, error } = UseFetch(
-          getFileTreeEndpoint(urlQuery)
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    getDataFromStorage(storageKey).then((res) => {
+      if (!res) {
+        useFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then((res) =>
+          setFileContextData(res)
         );
-
-        chrome.storage.local.set({ key: value }, function () {
-          console.log("Value is set to " + value);
-        });
-        return;
+      } else {
+        setFileContextData(res);
       }
-      //TODO
-      console.log("Value currently is " + result.key);
-    }
-  );
- */
+    });
+
+    return () => abortCtrl.abort();
+  }, []);
 
   return (
     <FileTreeContext.Provider
-      value={{ urlQuery, fileTree, fileContextPending, fileContextError }}
+      value={{
+        repoDetails,
+        fileContextData,
+      }}
     >
       {props.children}
     </FileTreeContext.Provider>

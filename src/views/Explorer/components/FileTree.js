@@ -1,10 +1,7 @@
 const FileTree = (props) => {
+  const fileTreeRender = () => {};
 
-    const fileTreeRender = () => {
-        
-    }
+  return <div></div>;
+};
 
-    return (  );
-}
- 
 export default FileTree;

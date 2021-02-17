@@ -2,12 +2,7 @@ import { useContext } from "react";
 import { FileTreeContext } from "../contexts/fileTreeContext";
 
 const Test = () => {
-  const {
-    urlQuery: repoDetails,
-    fileTree,
-    fileContextPending,
-    fileContextError,
-  } = useContext(FileTreeContext);
+  const { repoDetails, fileContextData } = useContext(FileTreeContext);
 
   console.log("test.js", repoDetails);
 
