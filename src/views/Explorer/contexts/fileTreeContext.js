@@ -3,16 +3,13 @@ import GetUrlQuery from "../common/getUrlQuery";
 import { getFileTreeEndpoint } from "../common/getEndpoints";
 import { getFetch } from "../common/getFetch";
 import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
+import { parseJsonToTree } from "../common/parseTree";
 
 export const FileTreeContext = createContext();
 
 const FileTreeContextProvider = (props) => {
   const repoDetails = GetUrlQuery();
-  const storageKey =
-    repoDetails.name +
-    repoDetails.author +
-    repoDetails.branch +
-    repoDetails.sha;
+  const storageKey = repoDetails.author + repoDetails.name + repoDetails.branch;
 
   const [fileContextData, setFileContextData] = useState(null);
 
@@ -20,14 +17,25 @@ const FileTreeContextProvider = (props) => {
 
   useEffect(() => {
     const abortCtrl = new AbortController();
-    getDataFromStorage(storageKey).then((res) => {
-      if (!res) {
-        getFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then((res) => {
-          setDataInStorage(storageKey, res);
-          setFileContextData(res);
-        });
+    getDataFromStorage().then((storageResponse) => {
+      if (!storageResponse || !storageResponse[storageKey]) {
+        getFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then(
+          (fetchResponse) => {
+            let storageData = {
+              ...fetchResponse.data,
+              tree: parseJsonToTree(fetchResponse.data.tree),
+            };
+            storageResponse = {
+              ...storageResponse,
+              [storageKey]: storageData,
+            };
+            if (!fetchResponse.isPending) setDataInStorage(storageResponse);
+            setFileContextData(fetchResponse);
+          }
+        );
       } else {
-        setFileContextData(res);
+        console.log("Data found in storage");
+        setFileContextData(storageResponse[storageKey]);
       }
     });
 

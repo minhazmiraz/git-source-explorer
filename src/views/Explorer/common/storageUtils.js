@@ -1,18 +1,18 @@
-export const getDataFromStorage = (storageKey) => {
+let key = "git-source-explorer";
+export const getDataFromStorage = () => {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.get([storageKey], (res) => {
-      if (!res[storageKey]) resolve(null);
+    chrome.storage.local.get([key], (res) => {
+      if (!res[key]) resolve(null);
       else {
-        resolve(res[storageKey]);
-        console.log("Data found in storage");
+        resolve(res[key]);
       }
     });
   });
 };
 
-export const setDataInStorage = (storageKey, value) => {
+export const setDataInStorage = (value) => {
   return new Promise((resolve, reject) => {
-    chrome.storage.local.set({ [storageKey]: value }, (res) => {
+    chrome.storage.local.set({ [key]: value }, (res) => {
       console.log("Value set ", value);
     });
   });
