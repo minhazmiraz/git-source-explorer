@@ -9,7 +9,7 @@ let openIde = (data) => {
 };
 
 let scrapeData = () => {
-  //console.log("scrapeData");
+  console.log("scrapeData");
   let repoData = {};
 
   //Get Repo Name and Repo Author
@@ -30,13 +30,13 @@ let scrapeData = () => {
 
   repoData["branch"] = branch_selector.outerText;
 
-  let last_commit_url = document.querySelector(
-    "#repo-content-pjax-container.repository-content [data-issue-and-pr-hovercards-enabled] .css-truncate a.link-gray-dark"
+  let shaSearchString =
+    "/" + repoData["author"] + "/" + repoData["name"] + "/commit/";
+  let shaSearchSpace = document.getElementsByTagName("body")[0].innerHTML;
+  repoData["sha"] = shaSearchSpace.substr(
+    shaSearchSpace.indexOf(shaSearchString) + shaSearchString.length,
+    40
   );
-
-  if (!last_commit_url) return false;
-
-  repoData["sha"] = last_commit_url.href.split("/").pop();
 
   if (!repoData["sha"]) return false;
 
@@ -44,10 +44,10 @@ let scrapeData = () => {
 };
 
 let contents = () => {
-  //console.log("contents");
+  console.log("contents");
   let data = scrapeData();
   if (data === false) return;
-  //console.log(data);
+  console.log(data);
 
   const parent = document.querySelector(".file-navigation");
   if (!parent) return;

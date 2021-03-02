@@ -30,7 +30,7 @@ const FileTreeContextProvider = (props) => {
               [storageKey]: storageData,
             };
             if (!fetchResponse.isPending) setDataInStorage(storageResponse);
-            setFileContextData(fetchResponse);
+            setFileContextData(storageResponse[storageKey]);
           }
         );
       } else {
