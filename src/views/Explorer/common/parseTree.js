@@ -7,19 +7,46 @@ const sortCmpFunc = (objA, objB) => {
   else return objA.name.localeCompare(objB.name);
 };
 
+const verifyChild = (parent, child) => {
+  return parent === child.split(/\/[^\/]*$/)[0];
+};
+
 const parseTree = () => {
+  let parent = tree[position].path;
+  let name = parent.split("/").pop();
+  let child = [];
+
+  while (parent && tree[position + 1]) {
+    position++;
+    if (verifyChild(parent, tree[position].path)) {
+      if (tree[position].type === "tree") child.push(parseTree());
+      else
+        child.push({
+          name: tree[position].path.split("/").pop(),
+          id: position + 2,
+          child: [],
+        });
+    } else {
+      position--;
+      break;
+    }
+  }
+  child.sort(sortCmpFunc);
+  return { name, id: position + 2, child };
+};
+
+/* const parseTree = () => {
   if (tree[position].type === "tree") {
     let parent = tree[position].path;
     let name = parent.split("/").pop();
     let child = [];
+
     while (true) {
       position++;
-      //console.log("path: ", tree[position]);
       if (
         !parent ||
         !tree[position] ||
-        parent.split(/\/[^\/]*$/)[0] !==
-          tree[position].path.split(/\/[^\/]*$/)[0]
+        verifyChild(parent, tree[position].path)
       ) {
         position--;
         break;
@@ -33,7 +60,7 @@ const parseTree = () => {
     let name = tree[position].path.split("/").pop();
     return { name, id: position + 2, child: [] };
   }
-};
+}; */
 
 export const parseJsonToTree = (jsonArray) => {
   tree = jsonArray;
