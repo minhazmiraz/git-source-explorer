@@ -17,6 +17,20 @@ const FileTreeContextProvider = (props) => {
 
   useEffect(() => {
     const abortCtrl = new AbortController();
+    getFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then(
+      (fetchResponse) => {
+        let storageData = {
+          ...fetchResponse.data,
+          tree: parseJsonToTree(fetchResponse.data.tree),
+        };
+        setFileContextData(storageData);
+      }
+    );
+    return () => abortCtrl.abort();
+  }, []);
+
+  /* useEffect(() => {
+    const abortCtrl = new AbortController();
     getDataFromStorage().then((storageResponse) => {
       if (!storageResponse || !storageResponse[storageKey]) {
         getFetch(getFileTreeEndpoint(repoDetails), abortCtrl).then(
@@ -40,7 +54,7 @@ const FileTreeContextProvider = (props) => {
     });
 
     return () => abortCtrl.abort();
-  }, []);
+  }, []); */
 
   return (
     <FileTreeContext.Provider

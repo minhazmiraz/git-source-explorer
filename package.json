@@ -7,7 +7,7 @@
     "react": "^17.0.1",
     "react-app-rewired": "^2.1.8",
     "react-dom": "^17.0.1",
-    "react-file-treeview": "^0.1.4",
+    "react-file-treeview": "^1.0.1",
     "react-scripts": "4.0.3"
   },
   "scripts": {

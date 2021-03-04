@@ -12,7 +12,7 @@
     {
       "js": ["static/js/content.js"],
       "matches": ["http://*.github.com/*", "https://*.github.com/*"],
-      "run_at": "document_end"
+      "run_at": "document_idle"
     }
   ],
   "icons": {

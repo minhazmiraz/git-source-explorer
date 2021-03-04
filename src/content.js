@@ -32,7 +32,8 @@ let scrapeData = () => {
 
   let shaSearchString =
     "/" + repoData["author"] + "/" + repoData["name"] + "/commit/";
-  let shaSearchSpace = document.getElementsByTagName("body")[0].innerHTML;
+  let shaSearchSpace = document.getElementById("repo-content-pjax-container")
+    .innerHTML;
   repoData["sha"] = shaSearchSpace.substr(
     shaSearchSpace.indexOf(shaSearchString) + shaSearchString.length,
     40
@@ -45,25 +46,27 @@ let scrapeData = () => {
 
 let contents = () => {
   console.log("contents");
-  let data = scrapeData();
-  if (data === false) return;
-  console.log(data);
+  setTimeout(() => {
+    let data = scrapeData();
+    if (data === false) return;
+    console.log(data);
 
-  const parent = document.querySelector(".file-navigation");
-  if (!parent) return;
-  const child = parent.querySelector("a.btn");
-  if (!child) return;
+    const parent = document.querySelector(".file-navigation");
+    if (!parent) return;
+    const child = parent.querySelector("a.btn");
+    if (!child) return;
 
-  let btn = document.createElement("button");
-  let btnText = document.createTextNode("Source");
-  btn.appendChild(btnText);
-  btn.setAttribute("class", "btn ml-2 d-none d-md-block");
-  btn.setAttribute("id", "sourceButton");
-  parent.insertBefore(btn, child);
+    let btn = document.createElement("button");
+    let btnText = document.createTextNode("Source");
+    btn.appendChild(btnText);
+    btn.setAttribute("class", "btn ml-2 d-none d-md-block");
+    btn.setAttribute("id", "sourceButton");
+    parent.insertBefore(btn, child);
 
-  document
-    .getElementById("sourceButton")
-    .addEventListener("click", () => openIde(data));
+    document
+      .getElementById("sourceButton")
+      .addEventListener("click", () => openIde(data));
+  }, 500);
 };
 
 contents();
