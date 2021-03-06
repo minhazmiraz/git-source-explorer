@@ -1,3 +1,4 @@
+import { useState } from "react";
 import FileTree from "react-file-treeview";
 const GitFileTree = ({ fileContextData }) => {
   let treeData =
@@ -11,6 +12,10 @@ const GitFileTree = ({ fileContextData }) => {
     toggled: true,
     child: treeData,
   };
+
+  //create Collapse button data
+  const [collapseAll, setCollapseAll] = useState(false);
+  const handleCollapseAll = (value) => setCollapseAll(value);
 
   //Create action data*
   const handleFileOnClick = (file) => {
@@ -32,7 +37,14 @@ const GitFileTree = ({ fileContextData }) => {
   return (
     <div className="">
       {fileContextData && (
-        <FileTree data={data} action={action} decorator={treeDecorator} />
+        <div>
+          <FileTree
+            data={data}
+            action={action}
+            decorator={treeDecorator}
+            collapseAll={{ collapseAll, handleCollapseAll }}
+          />
+        </div>
       )}
     </div>
   );

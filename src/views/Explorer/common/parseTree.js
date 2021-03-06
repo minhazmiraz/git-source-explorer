@@ -22,6 +22,7 @@ const parseTree = () => {
       if (tree[position].type === "tree") child.push(parseTree());
       else
         child.push({
+          path: tree[position].path,
           name: tree[position].path.split("/").pop(),
           id: position + 2,
           child: [],
@@ -32,35 +33,8 @@ const parseTree = () => {
     }
   }
   child.sort(sortCmpFunc);
-  return { name, id: position + 2, child };
+  return { path: parent, name, id: position + 2, child };
 };
-
-/* const parseTree = () => {
-  if (tree[position].type === "tree") {
-    let parent = tree[position].path;
-    let name = parent.split("/").pop();
-    let child = [];
-
-    while (true) {
-      position++;
-      if (
-        !parent ||
-        !tree[position] ||
-        verifyChild(parent, tree[position].path)
-      ) {
-        position--;
-        break;
-      }
-      child.push(parseTree());
-    }
-    child.sort(sortCmpFunc);
-
-    return { name, id: position + 2, child };
-  } else {
-    let name = tree[position].path.split("/").pop();
-    return { name, id: position + 2, child: [] };
-  }
-}; */
 
 export const parseJsonToTree = (jsonArray) => {
   tree = jsonArray;

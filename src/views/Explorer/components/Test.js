@@ -1,24 +1,50 @@
-import { useContext } from "react";
+import {
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  Menu,
+  useTheme,
+} from "@material-ui/core";
+import { ArrowBackIos, MenuRounded } from "@material-ui/icons";
+import { useContext, useState } from "react";
 import { FileTreeContext } from "../contexts/fileTreeContext";
 import GitFileTree from "./GitFileTree";
-import Navbar from "./Navbar";
 
 const Test = () => {
   const { repoDetails, fileContextData } = useContext(FileTreeContext);
+  const [isOpen, setIsOpen] = useState(true);
+  const theme = useTheme();
 
   console.log("test.js", repoDetails, fileContextData);
 
   return (
     <div className="">
-      <Navbar repoDetails={repoDetails} />
-      <div className="container-fluid">
-        <div className="row w-100">
-          <div class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky">
-              <GitFileTree fileContextData={fileContextData} />
-            </div>
-          </div>
-        </div>
+      <Drawer anchor="left" open={isOpen} variant="persistent">
+        <IconButton onClick={() => setIsOpen(!isOpen)}>
+          <ArrowBackIos fontSize="small" />
+        </IconButton>
+        <Divider />
+        <List>
+          <GitFileTree fileContextData={fileContextData} />
+        </List>
+      </Drawer>
+      {!isOpen && (
+        <IconButton onClick={() => setIsOpen(!isOpen)}>
+          <MenuRounded />
+        </IconButton>
+      )}
+      <div
+        style={{
+          transition: theme.transitions.create("margin", {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
+          marginLeft: `${isOpen && "240px"}`,
+        }}
+      >
+        <h2>Hello Worlds</h2>
       </div>
     </div>
   );
