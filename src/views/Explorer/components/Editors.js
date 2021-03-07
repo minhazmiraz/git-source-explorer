@@ -37,3 +37,26 @@ export default function CenteredTabs() {
     </Paper>
   );
 }
+
+/* <div
+        style={{
+          transition: theme.transitions.create("margin", {
+            easing: theme.transitions.easing.easeOut,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
+          marginLeft: `${isOpen ? "240px" : "0px"}`,
+        }}
+      >
+        <div>
+          <span style={{ display: "inline-block" }}>
+            {!isOpen && (
+              <IconButton onClick={() => setIsOpen(!isOpen)}>
+                <MenuRounded />
+              </IconButton>
+            )}
+          </span>
+          <span style={{ display: "inline-block" }}>
+            <SimpleTabs />
+          </span>
+        </div>
+      </div> */

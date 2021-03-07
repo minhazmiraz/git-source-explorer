@@ -1,15 +1,18 @@
 import React from "react";
-import Test from "./components/Test";
-import GitRepoContextProvider from "./contexts/gitRepoContext";
+import SourceExplorer from "./components/sourceExplorer";
+import GitRepoContextProvider from "./contexts/GitRepoContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
+import ExplorerContextProvider from "./contexts/ExplorerContext";
 
 function App() {
   return (
     <div className="App">
-      <GitRepoContextProvider>
-        <Test />
-      </GitRepoContextProvider>
+      <ExplorerContextProvider>
+        <GitRepoContextProvider>
+          <SourceExplorer />
+        </GitRepoContextProvider>
+      </ExplorerContextProvider>
     </div>
   );
 }

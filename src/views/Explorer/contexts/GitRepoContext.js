@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import GetUrlQuery from "../common/getUrlQuery";
 import { getFileTreeEndpoint } from "../common/getEndpoints";
 import { getFetch } from "../common/getFetch";
-import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
+//import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
 import { parseJsonToTree } from "../common/parseTree";
 
 export const GitRepoContext = createContext();
@@ -60,7 +60,7 @@ const GitRepoContextProvider = (props) => {
     <GitRepoContext.Provider
       value={{
         repoDetails,
-        gitRepoContextData,
+        gitRepoData: gitRepoContextData,
       }}
     >
       {props.children}
