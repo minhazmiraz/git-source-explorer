@@ -5,13 +5,13 @@ import { getFetch } from "../common/getFetch";
 import { getDataFromStorage, setDataInStorage } from "../common/storageUtils";
 import { parseJsonToTree } from "../common/parseTree";
 
-export const FileTreeContext = createContext();
+export const GitRepoContext = createContext();
 
-const FileTreeContextProvider = (props) => {
+const GitRepoContextProvider = (props) => {
   const repoDetails = GetUrlQuery();
   const storageKey = repoDetails.author + repoDetails.name + repoDetails.branch;
 
-  const [fileContextData, setFileContextData] = useState(null);
+  const [gitRepoContextData, setGitRepoContextData] = useState(null);
 
   console.log(repoDetails);
 
@@ -23,7 +23,7 @@ const FileTreeContextProvider = (props) => {
           ...fetchResponse.data,
           tree: parseJsonToTree(fetchResponse.data.tree),
         };
-        setFileContextData(storageData);
+        setGitRepoContextData(storageData);
       }
     );
     return () => abortCtrl.abort();
@@ -44,12 +44,12 @@ const FileTreeContextProvider = (props) => {
               [storageKey]: storageData,
             };
             if (!fetchResponse.isPending) setDataInStorage(storageResponse);
-            setFileContextData(storageResponse[storageKey]);
+            setGitRepoContextData(storageResponse[storageKey]);
           }
         );
       } else {
         console.log("Data found in storage");
-        setFileContextData(storageResponse[storageKey]);
+        setGitRepoContextData(storageResponse[storageKey]);
       }
     });
 
@@ -57,15 +57,15 @@ const FileTreeContextProvider = (props) => {
   }, []); */
 
   return (
-    <FileTreeContext.Provider
+    <GitRepoContext.Provider
       value={{
         repoDetails,
-        fileContextData,
+        gitRepoContextData,
       }}
     >
       {props.children}
-    </FileTreeContext.Provider>
+    </GitRepoContext.Provider>
   );
 };
 
-export default FileTreeContextProvider;
+export default GitRepoContextProvider;

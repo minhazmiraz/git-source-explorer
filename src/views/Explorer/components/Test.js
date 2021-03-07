@@ -1,23 +1,16 @@
-import {
-  Button,
-  Divider,
-  Drawer,
-  IconButton,
-  List,
-  Menu,
-  useTheme,
-} from "@material-ui/core";
+import { Divider, Drawer, IconButton, List, useTheme } from "@material-ui/core";
 import { ArrowBackIos, MenuRounded } from "@material-ui/icons";
 import { useContext, useState } from "react";
-import { FileTreeContext } from "../contexts/fileTreeContext";
+import { GitRepoContext } from "../contexts/gitRepoContext";
+import SimpleTabs from "./Editors";
 import GitFileTree from "./GitFileTree";
 
 const Test = () => {
-  const { repoDetails, fileContextData } = useContext(FileTreeContext);
+  const { repoDetails, gitRepoContextData } = useContext(GitRepoContext);
   const [isOpen, setIsOpen] = useState(true);
   const theme = useTheme();
 
-  console.log("test.js", repoDetails, fileContextData);
+  console.log("test.js", repoDetails, gitRepoContextData);
 
   return (
     <div className="">
@@ -27,24 +20,30 @@ const Test = () => {
         </IconButton>
         <Divider />
         <List>
-          <GitFileTree fileContextData={fileContextData} />
+          <GitFileTree gitRepoContextData={gitRepoContextData} />
         </List>
       </Drawer>
-      {!isOpen && (
-        <IconButton onClick={() => setIsOpen(!isOpen)}>
-          <MenuRounded />
-        </IconButton>
-      )}
       <div
         style={{
           transition: theme.transitions.create("margin", {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
           }),
-          marginLeft: `${isOpen && "240px"}`,
+          marginLeft: `${isOpen ? "240px" : "0px"}`,
         }}
       >
-        <h2>Hello Worlds</h2>
+        <div>
+          <span style={{ display: "inline-block" }}>
+            {!isOpen && (
+              <IconButton onClick={() => setIsOpen(!isOpen)}>
+                <MenuRounded />
+              </IconButton>
+            )}
+          </span>
+          <span style={{ display: "inline-block" }}>
+            <SimpleTabs />
+          </span>
+        </div>
       </div>
     </div>
   );

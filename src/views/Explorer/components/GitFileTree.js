@@ -1,8 +1,10 @@
 import { useState } from "react";
 import FileTree from "react-file-treeview";
-const GitFileTree = ({ fileContextData }) => {
+const GitFileTree = ({ gitRepoContextData }) => {
   let treeData =
-    fileContextData && fileContextData.tree ? fileContextData.tree : [];
+    gitRepoContextData && gitRepoContextData.tree
+      ? gitRepoContextData.tree
+      : [];
 
   console.log("treeData: ", treeData);
 
@@ -36,7 +38,7 @@ const GitFileTree = ({ fileContextData }) => {
 
   return (
     <div className="">
-      {fileContextData && (
+      {gitRepoContextData && (
         <div>
           <FileTree
             data={data}
