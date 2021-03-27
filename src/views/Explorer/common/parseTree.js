@@ -14,6 +14,7 @@ const verifyChild = (parent, child) => {
 const parseTree = () => {
   let parent = tree[position].path;
   let name = parent.split("/").pop();
+  let id = position + 2;
   let child = [];
 
   while (parent && tree[position + 1]) {
@@ -33,7 +34,7 @@ const parseTree = () => {
     }
   }
   child.sort(sortCmpFunc);
-  return { path: parent, name, id: position + 2, child };
+  return { path: parent, name, id, child };
 };
 
 export const parseJsonToTree = (jsonArray) => {

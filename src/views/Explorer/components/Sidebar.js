@@ -3,6 +3,7 @@ import { ArrowBackIos, MenuRounded } from "@material-ui/icons";
 import { useContext } from "react";
 import { ExplorerContext } from "../contexts/ExplorerContext";
 import { GitRepoContext } from "../contexts/GitRepoContext";
+import FileTreeView from "./FileTreeView";
 import GitFileTree from "./GitFileTree";
 
 const Sidebar = () => {
@@ -13,14 +14,25 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <Drawer anchor="left" open={sidebarData.isOpen} variant="persistent">
-        <div style={{ textAlign: "right" }}>
+      <Drawer
+        anchor="left"
+        open={sidebarData.isOpen}
+        variant="persistent"
+        PaperProps={{
+          style: { width: "200px" },
+          component: "div",
+          variant: "outlined",
+        }}
+      >
+        {/* <div style={{ textAlign: "right" }}>
           <IconButton onClick={() => setSidebarData({ type: "CLOSE_SIDEBAR" })}>
             <ArrowBackIos fontSize="small" />
           </IconButton>
         </div>
-        <Divider />
-        <GitFileTree gitRepoData={gitRepoData} />
+        <Divider /> */}
+        <div style={{ margin: "5px" }}>
+          <FileTreeView repoDetails={repoDetails} gitRepoData={gitRepoData} />
+        </div>
       </Drawer>
       {!sidebarData.isOpen && (
         <Fab
