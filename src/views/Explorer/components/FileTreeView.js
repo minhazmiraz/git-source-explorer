@@ -9,7 +9,7 @@ import {
 } from "file-extension-icon-js";
 import { makeStyles, Typography } from "@material-ui/core";
 
-const FileTreeView = ({ repoDetails, gitRepoData }) => {
+const FileTreeView = ({ repoDetails, gitRepoData, setEditorData }) => {
   let treeData = gitRepoData && gitRepoData.tree ? gitRepoData.tree : [];
 
   const data = {
@@ -25,7 +25,7 @@ const FileTreeView = ({ repoDetails, gitRepoData }) => {
       padding: theme.spacing(0.3, 0),
     },
     labelIcon: {
-      marginRight: theme.spacing(1),
+      marginRight: theme.spacing(0.3),
     },
     labelText: {
       fontWeight: "inherit",
@@ -35,6 +35,18 @@ const FileTreeView = ({ repoDetails, gitRepoData }) => {
 
   const handleOnFileClick = (nodes) => {
     console.log(nodes);
+    fetch(
+      "https://raw.githack.com/" +
+        repoDetails.author +
+        "/" +
+        repoDetails.name +
+        "/" +
+        repoDetails.branch +
+        "/" +
+        nodes.path
+    )
+      .then((res) => res.text())
+      .then((res) => setEditorData(res));
   };
 
   const treeIcon = (name, type) => {
@@ -73,7 +85,11 @@ const FileTreeView = ({ repoDetails, gitRepoData }) => {
         label={
           <div className={classes.labelRoot}>
             <i className={classes.labelIcon}>{LabelIcon}</i>
-            <Typography variant="body2" className={classes.labelText}>
+            <Typography
+              variant="body2"
+              className={classes.labelText}
+              style={{ whiteSpace: "nowrap" }}
+            >
               {labelText}
             </Typography>
           </div>

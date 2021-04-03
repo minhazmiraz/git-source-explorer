@@ -1,6 +1,6 @@
 import { Divider, Drawer, Fab, IconButton } from "@material-ui/core";
 import { ArrowBackIos, MenuRounded } from "@material-ui/icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ExplorerContext } from "../contexts/ExplorerContext";
 import { GitRepoContext } from "../contexts/GitRepoContext";
 import FileTreeView from "./FileTreeView";
@@ -11,6 +11,8 @@ const Sidebar = () => {
   const { repoDetails, gitRepoData } = useContext(GitRepoContext);
 
   console.log(sidebarData, gitRepoData);
+
+  const [editorData, setEditorData] = useState("<b>Loading</b>");
 
   return (
     <div className="sidebar">
@@ -31,7 +33,11 @@ const Sidebar = () => {
         </div>
         <Divider /> */}
         <div style={{ margin: "5px" }}>
-          <FileTreeView repoDetails={repoDetails} gitRepoData={gitRepoData} />
+          <FileTreeView
+            repoDetails={repoDetails}
+            gitRepoData={gitRepoData}
+            setEditorData={setEditorData}
+          />
         </div>
       </Drawer>
       {!sidebarData.isOpen && (
@@ -45,6 +51,10 @@ const Sidebar = () => {
           <MenuRounded />
         </Fab>
       )}
+
+      <div style={{ whiteSpace: "pre-wrap", paddingLeft: "215px" }}>
+        <code>{editorData}</code>
+      </div>
     </div>
   );
 };
